@@ -383,15 +383,8 @@ void VisualizerWithEditing::KeyPressCallback(
                     glfwMakeContextCurrent(window_);
                     geometry::PointCloud &pcd =
                             (geometry::PointCloud &)*editing_geometry_ptr_;
-                    if (std::shared_ptr<geometry::PointCloud> pcd_ptr =
-                                selection_polygon_ptr_->CropPointCloud(
-                                        pcd, view_control)) {
-                        pcd = *pcd_ptr;
-                    } else {
-                        utility::LogError(
-                                "Internal error: CropPointCloud returned "
-                                "nullptr.");
-                    }
+                    pcd = *selection_polygon_ptr_->CropPointCloud(pcd,
+                                                                  view_control);
                     editing_geometry_renderer_ptr_->UpdateGeometry();
                     const char *filename;
                     const char *pattern[1] = {"*.ply"};
@@ -423,15 +416,8 @@ void VisualizerWithEditing::KeyPressCallback(
                     glfwMakeContextCurrent(window_);
                     geometry::TriangleMesh &mesh =
                             (geometry::TriangleMesh &)*editing_geometry_ptr_;
-                    if (std::shared_ptr<geometry::TriangleMesh> mesh_ptr =
-                                selection_polygon_ptr_->CropTriangleMesh(
-                                        mesh, view_control)) {
-                        mesh = *mesh_ptr;
-                    } else {
-                        utility::LogError(
-                                "Internal error: CropTriangleMesh returned "
-                                "nullptr.");
-                    }
+                    mesh = *selection_polygon_ptr_->CropTriangleMesh(
+                            mesh, view_control);
                     editing_geometry_renderer_ptr_->UpdateGeometry();
                     const char *filename;
                     const char *pattern[1] = {"*.ply"};
