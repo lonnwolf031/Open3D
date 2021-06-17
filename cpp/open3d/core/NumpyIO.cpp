@@ -166,12 +166,7 @@ static std::tuple<char, int64_t, SizeVector, bool> ParseNumpyHeader(FILE* fp) {
     if (res != 11) {
         utility::LogError("ParseNumpyHeader: failed fread");
     }
-    std::string header;
-    if (const char* header_chars = fgets(buffer, 256, fp)) {
-        header = std::string(header_chars);
-    } else {
-        utility::LogError("ParseNumpyHeader: header is nullptr.");
-    }
+    std::string header = fgets(buffer, 256, fp);
     if (header[header.size() - 1] != '\n') {
         utility::LogError("ParseNumpyHeader: the last char must be '\n'");
     }
@@ -292,8 +287,7 @@ Tensor NumpyArray::ToTensor() const {
 NumpyArray NumpyArray::Load(const std::string& file_name) {
     FILE* fp = fopen(file_name.c_str(), "rb");
     if (!fp) {
-        utility::LogError("Load: Unable to open file {}.", file_name);
-        return NumpyArray(Tensor());
+        utility::LogError("NumpyLoad: Unable to open file {}.", file_name);
     }
     SizeVector shape;
     int64_t word_size;
@@ -304,7 +298,7 @@ NumpyArray NumpyArray::Load(const std::string& file_name) {
     size_t nread = fread(arr.GetDataPtr<char>(), 1,
                          static_cast<size_t>(arr.NumBytes()), fp);
     if (nread != static_cast<size_t>(arr.NumBytes())) {
-        utility::LogError("Load: failed fread");
+        utility::LogError("LoadTheNumpyFile: failed fread");
     }
     fclose(fp);
     return arr;
@@ -312,10 +306,6 @@ NumpyArray NumpyArray::Load(const std::string& file_name) {
 
 void NumpyArray::Save(std::string file_name) const {
     FILE* fp = fopen(file_name.c_str(), "wb");
-    if (!fp) {
-        utility::LogError("Save: Unable to open file {}.", file_name);
-        return;
-    }
     std::vector<char> header = CreateNumpyHeader(shape_, GetDtype());
     fseek(fp, 0, SEEK_SET);
     fwrite(&header[0], sizeof(char), header.size(), fp);

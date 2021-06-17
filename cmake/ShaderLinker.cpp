@@ -61,7 +61,7 @@ int main(int argc, char **argv) {
         if (file_in == nullptr) {
             printf("ShaderLinker:\n"
                    "Cannot open file %s\n",
-                   argv[i]);
+                   argv[2]);
             continue;
         }
 
@@ -76,8 +76,6 @@ int main(int argc, char **argv) {
             fprintf(file_out, "%s", buffer);
         }
         fprintf(file_out, "\n");
-
-        fclose(file_in);
     }
 
     fprintf(file_out, "// clang-format on\n");
