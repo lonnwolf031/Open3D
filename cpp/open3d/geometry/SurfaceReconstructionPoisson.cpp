@@ -190,7 +190,7 @@ struct FEMTreeProfiler {
     FEMTree<Dim, Real>& tree;
     double t;
 
-    FEMTreeProfiler(FEMTree<Dim, Real>& tree) : tree(tree), t(0.0) {}
+    FEMTreeProfiler(FEMTree<Dim, Real>& t) : tree(t) {}
     void start(void) {
         t = Time(), FEMTree<Dim, Real>::ResetLocalMemoryUsage();
     }
