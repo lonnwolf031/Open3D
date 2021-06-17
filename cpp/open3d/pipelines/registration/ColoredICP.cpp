@@ -257,17 +257,10 @@ RegistrationResult RegistrationColoredICP(
                 "ColoredICP requires source pointcloud to have colors.");
     }
 
-    if (auto target_c = InitializePointCloudForColoredICP(
-                target,
-                geometry::KDTreeSearchParamHybrid(max_distance * 2.0, 30))) {
-        return RegistrationICP(source, *target_c, max_distance, init,
-                               estimation, criteria);
-    } else {
-        utility::LogError(
-                "Internal error: InitializePointCloudForColoredICP returns "
-                "nullptr.");
-        return RegistrationResult();
-    };
+    auto target_c = InitializePointCloudForColoredICP(
+            target, geometry::KDTreeSearchParamHybrid(max_distance * 2.0, 30));
+    return RegistrationICP(source, *target_c, max_distance, init, estimation,
+                           criteria);
 }
 
 }  // namespace registration
